@@ -1,0 +1,99 @@
+Join Table & View
+Worksheet 4
+
+Nama	: Farwis Ilmi
+
+
+SOAL 4.1
+
+Tampilkan data berikut menggunakan join table:
+
+1.	
+Pesanan	Pelanggan	Kartu
+id	tanggal	total	kode	nama	nama kartu	diskon
+
+SELECT ...
+SELECT pesanan.id, pesanan.tanggal, pesanan. total, pelanggan.kode, pelanggan.nama, 
+kartu.nama as nama_kartu, kartu.diskon
+FROM pesanan INNER JOIN pelanggan ON pesanan.pelanggan_id = pelanggan.id
+INNER JOIN kartu ON pelanggan.kartu_id = kartu.id;
+
+2.	
+Pembelian	Produk	Vendor
+id	tanggal	nomor	jumlah	harga	nama	nama	kontak
+	
+	SELECT pembelian.id, pembelian.tanggal, pembelian.nomor, pembelian.jumlah, pembelian.harga,
+produk.nama, vendor.nama, vendor.kontak FROM pembelian INNER JOIN produk 
+ON pembelian.produk_id = produk.id 
+INNER JOIN vendor ON pembelian.vendor_id = vendor.id;
+
+3.	
+Pesanan	Pelanggan	Produk	Jenis produk	Pesanan items
+id	tanggal	total	nama	kode	nama	nama	qty	harga_jual
+
+
+
+SOAL 4.2
+
+Buatlah view berdasarkan query yang menampilkan data berikut ini:
+
+1.	
+Pesanan	Pelanggan	Kartu
+id	tanggal	total	kode	nama	nama kartu	diskon
+
+CREATE VIEW ...
+
+CREATE VIEW pesanan_pelanggan_kartu
+AS SELECT pesanan.id, pesanan.tanggal, pesanan. total, pelanggan.kode, pelanggan.nama, 
+kartu.nama as nama_kartu, kartu.diskon
+FROM pesanan INNER JOIN pelanggan ON pesanan.pelanggan_id = pelanggan.id
+INNER JOIN kartu ON pelanggan.kartu_id = kartu.id;
+
+2.	
+Pembelian	Produk	Vendor
+id	tanggal	nomor	jumlah	harga	nama	nama	Kontak
+	SELECT * FROM vendor;
+CREATE VIEW pembelian_produk_vendor 
+AS SELECT p.id, p.tanggal, p.nomor, p.jumlah, p.harga,
+pr.nama, v.nama as nama_vendor, v.kontak FROM pembelian p INNER JOIN produk pr
+ON p.produk_id = pr.id 
+INNER JOIN vendor v ON p.vendor_id = v.id;
+SELECT * FROM pembelian_produk_vendor;
+	
+3.	
+Pesanan	Pelanggan	Produk	Jenis produk	Pesanan items
+id	tanggal	total	nama	kode	nama	nama	qty	harga_jual
+
+
+Soal 4.3 Transaction
+1.	Buatlah sebuah transaction dengan skenario-skenario statement sebagai berikut:
+●	Mulai transaction
+START TRANSACTION;
+●	Insert data produk sebanyak 3 record
+INSERT INTO produk
+(kode,nama,harga_beli,harga_jual,stok,min_stok, jenis_produk_id) VALUES
+('TB02', 'Teh Botol 2', 4500, 5000, 10, 5, 4),
+('FT01', 'Fruitea', 5500, 6000, 10, 5, 4),
+('RG01', 'Laptop Asus ROG', 10000000, 14500000, 5, 2, 5);
+SELECT * FROM produk;
+●	Update data stok salah satu produk
+UPDATE produk SET stok = stok -2 WHERE id = 45;
+●	Buat savepoint
+SAVEPOINT save;
+●	Hapus salah satu data pembayaran
+DELETE FROM pembayaran WHERE id = 1;
+●	Kembali ke savepoint
+ROLLBACK TO save;
+●	Update data iuran salah satu kartu
+UPDATE kartu SET iuran = iuran + 500 WHERE id = 7;
+●	Akhiri transaction dengan commit
+COMMIT;
+2.	Berikan penjelasan kapan saat yang tepat menggunakan LOCK TABLES READ
+JAWAB: 
+Digunakan ketika ingin membaca data dari tabel yang tidak akan diubah oleh transaksi lain selama Anda membaca datanya. Ini berguna ketika melakukan operasi pembacaan besar yang memerlukan konsistensi data dan ingin memastikan bahwa tidak ada perubahan yang terjadi pada tabel selama proses pembacaan.
+LOCK TABLES READ dapat digunakan untuk mengunci tabel secara sementara untuk operasi pembacaan, dan melepaskan kunci setelah selesai.
+3.	Berikan penjelasan kapan saat yang tepat menggunakan LOCK TABLES WRITE
+JAWAB:
+Digunakan ketika ingin melakukan operasi penulisan (menambah, menghapus, atau mengubah data) pada tabel dan ingin memastikan tidak ada transaksi lain yang membaca atau menulis ke tabel tersebut selama operasi Anda sedang berlangsung. Ini penting ketika Anda melakukan operasi yang dapat memengaruhi konsistensi data dan ingin memastikan bahwa tidak ada operasi lain yang memodifikasi tabel yang sama pada saat yang bersamaan.
+LOCK TABLES WRITE mengunci tabel secara eksklusif, sehingga tidak ada transaksi lain yang dapat membaca atau menulis ke tabel tersebut sampai kunci dilepaskan.
+
