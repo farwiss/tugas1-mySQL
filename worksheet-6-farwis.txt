@@ -2,7 +2,7 @@ Stored Procedures, Stored Functions dan Trigger
 Worksheet 6
 
 Nama	: Farwis Ilmi
-
+ 
 SOAL 6.1
 
 1.	Buatlah Procedure untuk mengupdate harga_jual berdasarkan jenis produk tertentu (jenis_produk_id), beri nama procedure pro_naikan_harga memiliki parameter yang akan menerima argumen: Jenis Produk ID dan Persentase kenaikan harga.
